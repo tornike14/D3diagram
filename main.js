@@ -7,8 +7,6 @@ const error = document.getElementById('error');
 form.addEventListener('submit', (e) => {
 
     e.preventDefault();
-    console.log(db);
-
 
     if (item_name.value && item_cost.value) {
 
