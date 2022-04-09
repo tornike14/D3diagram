@@ -35,7 +35,9 @@ const update = (data) => {
         .attrTween('d', arcTweenExit)
         .remove();
 
-    paths.attr('d', arcPath);
+    paths.attr('d', arcPath)
+            .transition().duration(750)
+                .attrTween('d', arcTweenUpdate);;
 
     paths.enter()
         .append('path')
@@ -43,6 +45,9 @@ const update = (data) => {
             .attr('stroke', '#fff')
             .attr('stroke-width', 3)
             .attr('fill', d => color(d.data.name))
+            .each(function(d) {
+                this._current = d
+            })
             .transition().duration(750)
                 .attrTween('d', arcTweenEnter);
 }
@@ -94,5 +99,19 @@ const arcTweenExit = (d) => {
         d.startAngle = i(t);
 
         return arcPath(d);
+    }
+}
+
+// use function keyword
+function arcTweenUpdate(d) {
+    
+    // interpolate betweet two objects
+    let i = d3.interpolate(this._current, d);
+
+    // update the current data with new update data
+    this._current = i(1)
+
+    return function(t) {
+         return arcPath(i(t))
     }
 }
